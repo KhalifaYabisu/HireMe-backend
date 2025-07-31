@@ -1,36 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import AdminLogin from './pages/AdminLogin';
+import AdminDashboard from './pages/AdminDashboard';
+import Home from './pages/Home'; // optional
 
 function App() {
-  const [workers, setWorkers] = useState([]);
-
-  useEffect(() => {
-    fetch('http://localhost:3000/api/workers') // <-- Keep this as-is IF your backend is still on port 3000
-
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.success) {
-          setWorkers(data.data);
-        } else {
-          alert('Failed to fetch workers');
-        }
-      })
-      .catch((err) => {
-        console.error(err);
-        alert('Error fetching workers');
-      });
-  }, []);
-
   return (
-    <div style={{ padding: '20px' }}>
-      <h1>Worker List</h1>
-      <ul>
-        {workers.map((worker) => (
-          <li key={worker._id}>
-            {worker.name} - {worker.role}
-          </li>
-        ))}
-      </ul>
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/admin" element={<AdminLogin />} />
+        <Route path="/dashboard" element={<AdminDashboard />} />
+      </Routes>
+    </Router>
   );
 }
 
