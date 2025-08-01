@@ -1,31 +1,18 @@
-const API_URL = 'https://workwhiz-backend.onrender.com/api/workers';
+// models/Worker.js
 
-// Fetch all workers
-export const getWorkers = async () => {
-  try {
-    const res = await fetch(API_URL);
-    const data = await res.json();
-    return data;
-  } catch (err) {
-    console.error('Error fetching workers:', err);
-    return null;
-  }
-};
+const mongoose = require('mongoose');
 
-// Add a new worker
-export const addWorker = async (workerData) => {
-  try {
-    const res = await fetch(API_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(workerData),
-    });
-    const data = await res.json();
-    return data;
-  } catch (err) {
-    console.error('Error adding worker:', err);
-    return null;
-  }
-};
+const workerSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+  },
+  occupation: {
+    type: String,
+    required: true,
+  },
+  location: String,
+  phone: String,
+}, { timestamps: true });
+
+module.exports = mongoose.model('Worker', workerSchema);
