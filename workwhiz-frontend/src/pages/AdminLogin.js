@@ -1,53 +1,42 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-function AdminLogin() {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+const AdminLogin = () => {
+  const [form, setForm] = useState({ username: '', password: '' });
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  const handleLogin = async (e) => {
+  const handleChange = e => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async e => {
     e.preventDefault();
-    setError('');
-
-    try {
-      const res = await fetch('http://localhost:3000/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password }),
-      });
-
-      const data = await res.json();
-
-      if (res.ok) {
-        localStorage.setItem('token', data.token);
-        navigate('/admin');
-      } else {
-        setError(data.message || 'Login failed');
-      }
-    } catch (err) {
-      setError('An error occurred. Please try again.');
+    const res = await fetch('https://workwhiz-backend.onrender.com/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(form)
+    });
+    const data = await res.json();
+    if (data.token) {
+      localStorage.setItem('token', data.token);
+      navigate('/dashboard');
+    } else {
+      setError(data.message || 'Login failed');
     }
   };
 
   return (
-    <div style={{ padding: '2rem' }}>
+    <div>
       <h2>Admin Login</h2>
-      <form onSubmit={handleLogin}>
-        <div>
-          <label>Username: </label>
-          <input value={username} onChange={(e) => setUsername(e.target.value)} required />
-        </div>
-        <div style={{ marginTop: '1rem' }}>
-          <label>Password: </label>
-          <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
-        </div>
-        <button style={{ marginTop: '1rem' }} type="submit">Login</button>
+      <form onSubmit={handleSubmit}>
+        <input name="username" onChange={handleChange} placeholder="Username" required />
+        <input name="password" type="password" onChange={handleChange} placeholder="Password" required />
+        <button type="submit">Login</button>
       </form>
-      {error && <p style={{ color: 'red', marginTop: '1rem' }}>{error}</p>}
+      {error && <p style={{ color: 'red' }}>{error}</p>}
     </div>
   );
-}
+};
 
 export default AdminLogin;

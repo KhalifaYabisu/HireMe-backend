@@ -1,41 +1,40 @@
 import React, { useEffect, useState } from 'react';
 
-function AdminDashboard() {
+const AdminDashboard = () => {
   const [workers, setWorkers] = useState([]);
-  const [error, setError] = useState('');
-
   const token = localStorage.getItem('token');
 
+  const fetchWorkers = async () => {
+    const res = await fetch('https://workwhiz-backend.onrender.com/api/workers');
+    const data = await res.json();
+    setWorkers(data.workers);
+  };
+
+  const deleteWorker = async id => {
+    await fetch(`https://workwhiz-backend.onrender.com/api/workers/${id}`, {
+      method: 'DELETE',
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    fetchWorkers();
+  };
+
   useEffect(() => {
-    fetch('http://localhost:3000/workers', {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then(res => res.json())
-      .then(data => {
-        if (data.success) {
-          setWorkers(data.data);
-        } else {
-          setError(data.message || 'Failed to fetch workers');
-        }
-      })
-      .catch(err => setError('Error fetching data'));
-  }, [token]);
+    fetchWorkers();
+  }, []);
 
   return (
-    <div style={{ padding: '2rem' }}>
+    <div>
       <h2>Admin Dashboard</h2>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
       <ul>
-        {workers.map((worker) => (
+        {workers.map(worker => (
           <li key={worker._id}>
-            {worker.name} – {worker.skill}
+            {worker.name} - {worker.skill}
+            <button onClick={() => deleteWorker(worker._id)}>Delete</button>
           </li>
         ))}
       </ul>
     </div>
   );
-}
+};
 
 export default AdminDashboard;

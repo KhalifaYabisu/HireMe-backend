@@ -1,12 +1,27 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
-function Home() {
+const Home = () => {
+  const [workers, setWorkers] = useState([]);
+
+  useEffect(() => {
+    fetch('https://workwhiz-backend.onrender.com/api/workers')
+      .then(res => res.json())
+      .then(data => setWorkers(data.workers))
+      .catch(err => console.error('Error fetching workers:', err));
+  }, []);
+
   return (
-    <div style={{ padding: '2rem' }}>
-      <h1>Welcome to WorkWhiz</h1>
-      <p>This is the home page.</p>
+    <div>
+      <h2>Available Workers</h2>
+      <ul>
+        {workers.map(worker => (
+          <li key={worker._id}>
+            {worker.name} - {worker.skill}
+          </li>
+        ))}
+      </ul>
     </div>
   );
-}
+};
 
 export default Home;
