@@ -2,6 +2,7 @@ import express from "express";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
+import Admin from "../models/adminModel.js";
 
 const router = express.Router();
 
@@ -40,17 +41,8 @@ router.post("/login", async (req, res) => {
   }
 });
 
-export default router;
-
-const express = require('express');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const Admin = require('../models/adminModel');
-
-const router = express.Router();
-
-// POST /api/auth/login
-router.post('/login', async (req, res) => {
+// POST /api/auth/admin/login
+router.post('/admin/login', async (req, res) => {
   const { email, password } = req.body;
   try {
     const admin = await Admin.findOne({ email });
@@ -71,8 +63,8 @@ router.post('/login', async (req, res) => {
 });
 
 // OPTIONAL: initial register (Disable/remove in production)
-// POST /api/auth/register
-router.post('/register', async (req, res) => {
+// POST /api/auth/admin/register
+router.post('/admin/register', async (req, res) => {
   const { email, password } = req.body;
   try {
     const exists = await Admin.findOne({ email });
@@ -87,4 +79,4 @@ router.post('/register', async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

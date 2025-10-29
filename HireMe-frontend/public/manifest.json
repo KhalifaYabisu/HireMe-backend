@@ -1,6 +1,11 @@
 {
+<<<<<<< HEAD
   "short_name": "HireMe",
   "name": "HireMe - Find jobs around your area",
+=======
+  "short_name": "React App",
+  "name": "Create React App Sample",
+>>>>>>> 1a2d2fcb9b3ec92d75c9e7d6b714270817e9953b
   "icons": [
     {
       "src": "favicon.ico",
@@ -20,6 +25,10 @@
   ],
   "start_url": ".",
   "display": "standalone",
+<<<<<<< HEAD
   "theme_color": "#0c4a6e",
+=======
+  "theme_color": "#000000",
+>>>>>>> 1a2d2fcb9b3ec92d75c9e7d6b714270817e9953b
   "background_color": "#ffffff"
 }

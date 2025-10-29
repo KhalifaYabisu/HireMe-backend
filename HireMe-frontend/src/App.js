@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { ToastProvider } from "./contexts/ToastContext";
@@ -53,6 +54,40 @@ function App() {
         </div>
       </Router>
     </ToastProvider>
+=======
+import React, { useEffect, useState } from 'react';
+
+function App() {
+  const [workers, setWorkers] = useState([]);
+
+  useEffect(() => {
+    fetch('http://localhost:3000/api/workers') // Change port if your backend uses a different one
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success) {
+          setWorkers(data.data);
+        } else {
+          alert('Failed to fetch workers');
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+        alert('Error fetching workers');
+      });
+  }, []);
+
+  return (
+    <div style={{ padding: '20px' }}>
+      <h1>Worker List</h1>
+      <ul>
+        {workers.map((worker) => (
+          <li key={worker._id}>
+            {worker.name} - {worker.role}
+          </li>
+        ))}
+      </ul>
+    </div>
+>>>>>>> 1a2d2fcb9b3ec92d75c9e7d6b714270817e9953b
   );
 }
 
